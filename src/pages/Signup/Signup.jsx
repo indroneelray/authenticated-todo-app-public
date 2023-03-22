@@ -1,48 +1,93 @@
 import React from "react";
+import { Navigate, useNavigate } from "react-router";
+import Swal from "sweetalert2";
+
+const BASE_URL = "http://localhost:5500";
+const PROD_BASE_URL =
+  "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com/users";
 
 export default function Signup() {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const navigate = useNavigate()
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${BASE_URL}/users`, {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      });
+      const resJson = await res.json();
+      if(res.status !== 200) throw resJson.error
+      return Swal.fire("Congratulations", resJson.message, "success").then(()=>{
+        navigate('/login')
+      })
+
+    } catch (err) {
+      console.log(err);
+      return Swal.fire("Error", err, "error");
+    }
+  };
+
   return (
-    <div class="w-full max-w-xs">
-      <h1 class="text-black text-center mb-2 text-3xl font-semibold">
+    <div className="w-full max-w-xs">
+      <h1 className="text-black text-center mb-2 text-3xl font-semibold">
         Sign up
       </h1>
 
-      <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+      <form
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        onSubmit={onSubmit}
+      >
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
             Email
           </label>
           <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
             type="text"
             placeholder="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div class="mb-6">
+        <div className="mb-6">
           <label
-            class="block text-gray-700 text-sm font-bold mb-2"
-            for="password"
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
           >
             Password
           </label>
           <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
-            placeholder="******************"
+            placeholder="*******"
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div class="flex items-center justify-center">
+        <div className="flex items-center justify-center">
           <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
           >
             Sign up
           </button>
         </div>
       </form>
-      <p class="text-center text-gray-500 text-xs">
+      <p className="text-center text-gray-500 text-xs">
         &copy;2020 Acme Corp. All rights reserved.
       </p>
     </div>

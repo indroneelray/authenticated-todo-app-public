@@ -1,52 +1,87 @@
 import React from "react";
 import { useNavigate } from "react-router";
 
-export default function Login() {
+const BASE_URL = "http://localhost:5500";
+const PROD_BASE_URL =
+  "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com/users";
 
-  const navigate = useNavigate()
+export default function Login() {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const navigate = useNavigate();
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${BASE_URL}/login`, {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      });
+
+      const resjson = await res.json();
+      console.log(resjson)
+      if (res.status !== 200) throw resjson;
+      else {
+        console.log("should navigate");
+        navigate("/todos");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
-    <div class="w-full max-w-xs">
-      <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div class="mb-4">
+    <div className="w-full max-w-xs">
+      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
           <label
-            class="block text-gray-700 text-sm font-bold mb-2"
-            for="username"
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
           >
-            Username
+            Email
           </label>
           <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
             type="text"
-            placeholder="Username"
+            placeholder="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div class="mb-6">
+        <div className="mb-6">
           <label
-            class="block text-gray-700 text-sm font-bold mb-2"
-            for="password"
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
           >
             Password
           </label>
           <input
-            class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
-            placeholder="******************"
+            placeholder="******"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <p class="text-red-500 text-xs italic">Please choose a password.</p>
         </div>
-        <div class="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-            onClick={()=>navigate('/sign-up')}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+            onClick={onSubmit}
           >
-            Sign up
+            Sign in
           </button>
         </div>
       </form>
-      <p class="text-center text-gray-500 text-xs">
+      <p className="text-center text-gray-500 text-xs">
         &copy;2023 Ray Enterprises. All rights reserved.
       </p>
     </div>
