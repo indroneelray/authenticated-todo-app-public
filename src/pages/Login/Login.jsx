@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 
 const BASE_URL = "http://localhost:5500";
 const PROD_BASE_URL =
-  "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com/users";
+  "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com";
 
 export default function Login() {
   const [email, setEmail] = React.useState("");
@@ -14,7 +14,7 @@ export default function Login() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${BASE_URL}/login`, {
+      const res = await fetch(`${PROD_BASE_URL}/login`, {
         method: "POST",
         body: JSON.stringify({
           email: email,
@@ -23,6 +23,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
         },
+        credentials: "include",
       });
 
       const resjson = await res.json();

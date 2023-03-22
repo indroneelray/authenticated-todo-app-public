@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 
 const BASE_URL = "http://localhost:5500";
 const PROD_BASE_URL =
-  "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com/users";
+  "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com";
 
 export default function Signup() {
   const [email, setEmail] = React.useState("");
@@ -15,7 +15,7 @@ export default function Signup() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${BASE_URL}/users`, {
+      const res = await fetch(`${PROD_BASE_URL}/users`, {
         method: "POST",
         body: JSON.stringify({
           email: email,
@@ -24,6 +24,8 @@ export default function Signup() {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
         },
+        credentials: "include",
+
       });
       const resJson = await res.json();
       if(res.status !== 200) throw resJson.error

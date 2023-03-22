@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
+import { BASE_URL, PROD_BASE_URL } from "./api";
 import "./App.css";
 import ListItem from "./ListItem";
 
@@ -8,24 +9,10 @@ function App() {
 
   const fetchTodoItems = async () => {
     try {
-      await fetch("https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-        },
-        body: JSON.stringify({
-          email: "indroneelray@gmail.com",
-          password: "test@12345",
-        }),
+      const response = await fetch(`${PROD_BASE_URL}/todos`, {
+        method: "GET",
         credentials: "include",
       });
-      const response = await fetch(
-        "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com/todos",
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
       const { data } = await response.json();
       setTodos(data);
     } catch (err) {
