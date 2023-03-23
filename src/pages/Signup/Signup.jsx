@@ -15,7 +15,7 @@ export default function Signup() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${PROD_BASE_URL}/users`, {
+      const res = await fetch(`${BASE_URL}/users`, {
         method: "POST",
         body: JSON.stringify({
           email: email,

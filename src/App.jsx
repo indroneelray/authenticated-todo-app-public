@@ -1,15 +1,17 @@
 import React from "react";
 import { useEffect } from "react";
-import { BASE_URL, PROD_BASE_URL } from "./api";
+import { navigate, useNavigate } from "react-router";
+import { BASE_URL } from "./api";
 import "./App.css";
 import ListItem from "./ListItem";
 
 function App() {
   const [todos, setTodos] = React.useState([]);
+  const navigate = useNavigate();
 
   const fetchTodoItems = async () => {
     try {
-      const response = await fetch(`${PROD_BASE_URL}/todos`, {
+      const response = await fetch(`${BASE_URL}/todos`, {
         method: "GET",
         credentials: "include",
       });
@@ -49,6 +51,12 @@ function App() {
     [todos]
   );
 
+  const logout = async () => {
+    console.log("logging out");
+    await fetch(`${BASE_URL}/logout`);
+    navigate("/login");
+  };
+
   useEffect(() => {
     fetchTodoItems();
     // populateInsaneAmountOfTodos()
@@ -56,6 +64,12 @@ function App() {
 
   return (
     <div data-testid="app-container">
+      <button
+        className="btn border text-lg text-black"
+        onClick={() => logout()}
+      >
+        Logout
+      </button>
       <fieldset className="">
         <legend
           className="text-base font-semibold leading-6 text-gray-900 p-2"
