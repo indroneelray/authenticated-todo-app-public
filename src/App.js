@@ -8,17 +8,17 @@ function App() {
 
   const fetchTodoItems = async () => {
     try {
-      await fetch("https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-        },
-        body: JSON.stringify({
-          email: "indroneelray@gmail.com",
-          password: "test@12345",
-        }),
-        credentials: "include",
-      });
+      // await fetch("https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com/login", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json; charset=utf-8",
+      //   },
+      //   body: JSON.stringify({
+      //     email: "indroneelray@gmail.com",
+      //     password: "test@12345",
+      //   }),
+      //   credentials: "include",
+      // });
       const response = await fetch(
         "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com/todos",
         {
