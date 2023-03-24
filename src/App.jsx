@@ -7,7 +7,7 @@ import ListItem from "./ListItem";
 
 function App() {
   const [todos, setTodos] = React.useState([]);
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const fetchTodoItems = async () => {
     try {
@@ -16,7 +16,7 @@ function App() {
         credentials: "include",
       });
       const { data } = await response.json();
-      setTodos(data);
+      setTodos(data ?? []);
     } catch (err) {
       console.log(err);
     }
@@ -53,7 +53,9 @@ function App() {
 
   const logout = async () => {
     console.log("logging out");
-    await fetch(`${BASE_URL}/logout`);
+    await fetch(`${BASE_URL}/logout`, {
+      credentials:'include'
+    });
     navigate("/login");
   };
 

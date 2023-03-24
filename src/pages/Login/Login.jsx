@@ -1,20 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router";
+import Wrapper from "../../components/Wrapper";
+import { UserContext } from "../../store/UserContext";
 
 const BASE_URL = "http://localhost:5500";
-const PROD_BASE_URL =
-  "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com";
+const PROD_BASE_URL = "https://cyx9e2ptzg.execute-api.ap-south-1.amazonaws.com";
 
 export default function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
+  const [userDetails, setUserDetails] = useContext(UserContext);
+
+  console.log(userDetails, setUserDetails);
 
   const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${BASE_URL}/login`, {
+      const res = await fetch(`${PROD_BASE_URL}/login`, {
         method: "POST",
         body: JSON.stringify({
           email: email,
@@ -27,11 +32,12 @@ export default function Login() {
       });
 
       const resjson = await res.json();
-      console.log(resjson)
+      console.log(resjson);
       if (res.status !== 200) throw resjson;
       else {
         console.log("should navigate");
-        navigate("/todos");
+        setUserDetails({ ...resjson });
+        // navigate("/todos");
       }
     } catch (err) {
       console.log(err);
@@ -84,6 +90,10 @@ export default function Login() {
       </form>
       <p className="text-center text-gray-500 text-xs">
         &copy;2023 Ray Enterprises. All rights reserved.
+      </p>
+
+      <p>
+        <b>Email:&nbsp;{!userDetails?.email ? 'No email set yet' : userDetails.email}</b>
       </p>
     </div>
   );
